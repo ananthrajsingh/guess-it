@@ -35,15 +35,7 @@ class GameFragment : Fragment() {
 
     private lateinit var viewModel: GameViewModel
 
-    // TODO (01) Move over the word, score and wordList variables to the GameViewModel
-    // The current word
-    private var word = ""
-
-    // The current score
-    private var score = 0
-
-    // The list of words - the front of the list is the next word to guess
-    private lateinit var wordList: MutableList<String>
+    // COMPLETED (01) Move over the word, score and wordList variables to the GameViewModel
 
     private lateinit var binding: GameFragmentBinding
 
@@ -61,95 +53,50 @@ class GameFragment : Fragment() {
         // Get the viewmodel
         Log.i("GameFragment", "Called ViewModelProviders.of")
         viewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
-
-        // TODO (03) Move over this initialization to the GameViewModel
-        resetList()
-        nextWord()
-
-        // TODO (04) Update these onClickListeners to refer to call methods in the ViewModel then
-        // update the UI
-        binding.correctButton.setOnClickListener { onCorrect() }
-        binding.skipButton.setOnClickListener { onSkip() }
         updateScoreText()
         updateWordText()
+        // TODO (03) Move over this initialization to the GameViewModel
+
+        // COMPLETED (04) Update these onClickListeners to refer to call methods in the ViewModel then
+        // update the UI
+        binding.correctButton.setOnClickListener {
+            viewModel.onCorrect()
+            updateScoreText()
+            updateWordText()
+        }
+        binding.skipButton.setOnClickListener {
+            viewModel.onSkip()
+            updateScoreText()
+            updateWordText()
+        }
+
         return binding.root
 
     }
 
-    // TODO (02) Move over methods resetList, nextWord, onSkip and onCorrect to the GameViewModel
-    /**
-     * Resets the list of words and randomizes the order
-     */
-    private fun resetList() {
-        wordList = mutableListOf(
-                "queen",
-                "hospital",
-                "basketball",
-                "cat",
-                "change",
-                "snail",
-                "soup",
-                "calendar",
-                "sad",
-                "desk",
-                "guitar",
-                "home",
-                "railway",
-                "zebra",
-                "jelly",
-                "car",
-                "crow",
-                "trade",
-                "bag",
-                "roll",
-                "bubble"
-        )
-        wordList.shuffle()
-    }
+    // COMPLETED (02) Move over methods resetList, nextWord, onSkip and onCorrect to the GameViewModel
+
 
     /**
      * Called when the game is finished
      */
     private fun gameFinished() {
-        val action = GameFragmentDirections.actionGameToScore(score)
-        findNavController(this).navigate(action)
+//        val action = GameFragmentDirections.actionGameToScore(score)
+//        findNavController(this).navigate(action)
     }
 
-    /**
-     * Moves to the next word in the list
-     */
-    private fun nextWord() {
-        //Select and remove a word from the list
-        if (wordList.isEmpty()) {
-            gameFinished()
-        } else {
-            word = wordList.removeAt(0)
-        }
-        updateWordText()
-        updateScoreText()
-    }
 
-    /** Methods for buttons presses **/
 
-    private fun onSkip() {
-        score--
-        nextWord()
-    }
-
-    private fun onCorrect() {
-        score++
-        nextWord()
-    }
 
     /** Methods for updating the UI **/
 
-    // TODO (05) Update these methods to get word and score from the viewmodel
+    // COMPLETED (05) Update these methods to get word and score from the viewmodel
     private fun updateWordText() {
-        binding.wordText.text = word
+        binding.wordText.text = viewModel.word
 
     }
 
     private fun updateScoreText() {
-        binding.scoreText.text = score.toString()
+        binding.scoreText.text = viewModel.toString()
     }
 }
