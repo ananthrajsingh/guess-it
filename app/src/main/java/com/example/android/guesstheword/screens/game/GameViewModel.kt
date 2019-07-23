@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, The Android Open Source Project
+ * Copyright 2018, The   Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,12 +37,14 @@ class GameViewModel : ViewModel() {
     val score: LiveData<Int>
         get() = _score
 
-
     // The list of words - the front of the list is the next word to guess
     private lateinit var wordList: MutableList<String>
 
-    // TODO (01) Make a properly encapsulated LiveData called eventGameFinish that holds a
     // boolean
+    private val _eventGameFinished = MutableLiveData<Boolean>()
+    val eventGameFinished: LiveData<Boolean>
+        get() = _eventGameFinished
+
 
     init {
         resetList()
@@ -87,7 +89,7 @@ class GameViewModel : ViewModel() {
         //Select and remove a word from the list
         if (wordList.isEmpty()) {
             // gameFinished() should happen here
-            // TODO (03) Set eventGameFinish to true, to signify that the game is over
+            _eventGameFinished.value = true
         } else {
             _word.value = wordList.removeAt(0)
         }
@@ -105,6 +107,7 @@ class GameViewModel : ViewModel() {
         nextWord()
     }
 
-    // TODO (02) Make the function onGameFinishComplete which makes the value of eventGameFinish
-    // false
+    public fun onGameFinishComplete() { _eventGameFinished.value = false }
+
+
 }
