@@ -22,6 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.example.android.guesstheword.R
@@ -52,19 +53,19 @@ class GameFragment : Fragment() {
 
         binding.correctButton.setOnClickListener {
             viewModel.onCorrect()
-            updateScoreText()
-            updateWordText()
         }
         binding.skipButton.setOnClickListener {
             viewModel.onSkip()
-            updateScoreText()
-            updateWordText()
         }
 
-        // TODO (04) Setup the LiveData observation relationship by getting the LiveData from your
+        // COMPLETED (04) Setup the LiveData observation relationship by getting the LiveData from your
         // ViewModel and calling observe. Make sure to pass in *this* and then an Observer lambda
-        updateScoreText()
-        updateWordText()
+        viewModel.score.observe(this, Observer { newScore ->
+            binding.scoreText.text = newScore.toString()
+        } )
+        viewModel.word.observe(this, Observer { newWord ->
+            binding.wordText.text = newWord
+        })
         return binding.root
 
     }
@@ -73,21 +74,15 @@ class GameFragment : Fragment() {
      * Called when the game is finished
      */
     fun gameFinished() {
-        // TODO (06) Add a null safety check here - you can use the elvis operator to pass 0 if
+        // COMPLETED (06) Add a null safety check here - you can use the elvis operator to pass 0 if
         // the LiveData is null
-        val action = GameFragmentDirections.actionGameToScore(viewModel.score)
+        val action = GameFragmentDirections.actionGameToScore(viewModel.score.value ?: 0)
         findNavController(this).navigate(action)
     }
 
     /** Methods for updating the UI **/
 
-    // TODO (05) Move this code to update the UI up to your Observers; remove references to
+    // COMPLETED (05) Move this code to update the UI up to your Observers; remove references to
     // updateWordText and updateScoreText - you shouldn't need them!
-    private fun updateWordText() {
-        binding.wordText.text = viewModel.word
-    }
 
-    private fun updateScoreText() {
-        binding.scoreText.text = viewModel.score.toString()
-    }
 }
