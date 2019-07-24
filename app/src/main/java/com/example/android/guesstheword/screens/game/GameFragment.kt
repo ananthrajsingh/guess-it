@@ -67,9 +67,12 @@ class GameFragment : Fragment() {
             binding.scoreText.text = newScore.toString()
         })
 
-        // TODO (07) Setup an observer relationship to update binding.timerText
+        // COMPLETED (07) Setup an observer relationship to update binding.timerText
         // You can use DateUtils.formatElapsedTime to correctly format the long to a time string
 
+        viewModel.currentTime.observe(this, Observer { currentTime ->
+            binding.timerText.text = currentTime.toString()
+        })
         // Sets up event listening to navigate the player when the game is finished
         viewModel.eventGameFinish.observe(this, Observer { isFinished ->
             if (isFinished) {
