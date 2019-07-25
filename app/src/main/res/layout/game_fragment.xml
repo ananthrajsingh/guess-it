@@ -67,7 +67,7 @@
             app:layout_constraintVertical_chainStyle="packed"
             tools:text="&quot;Tuna&quot;" />
 
-        <!-- TODO (03) Set the text attribute of timer_text to the value of currentTimeString -->
+        <!-- COMPLETED (03) Set the text attribute of timer_text to the value of currentTimeString -->
         <TextView
             android:id="@+id/timer_text"
             android:layout_width="wrap_content"
@@ -79,6 +79,7 @@
             android:textColor="@color/grey_text_color"
             android:textSize="14sp"
             android:textStyle="normal"
+            android:text="@{gameViewModel.currentTimeString}"
             app:layout_constraintBottom_toTopOf="@+id/score_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
