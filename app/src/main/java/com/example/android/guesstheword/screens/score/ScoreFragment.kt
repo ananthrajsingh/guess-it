@@ -34,8 +34,8 @@ import com.example.android.guesstheword.databinding.ScoreFragmentBinding
  */
 class ScoreFragment : Fragment() {
 
-    lateinit var viewModelFactory: ScoreViewModelFactory
-    lateinit var viewModel: ScoreViewModel
+    private lateinit var viewModel: ScoreViewModel
+    private lateinit var viewModelFactory: ScoreViewModelFactory
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -51,33 +51,27 @@ class ScoreFragment : Fragment() {
                 false
         )
 
-        // TODO (04) Create and construct a ScoreViewModelFactory
-        // TODO (05) Create ScoreViewModel by using ViewModelProviders.of as usual, except also
-        // pass in your ScoreViewModelFactory
+
         val scoreFragmentArgs by navArgs<ScoreFragmentArgs>()
 
         viewModelFactory = ScoreViewModelFactory(scoreFragmentArgs.score)
         viewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(ScoreViewModel::class.java)
-        // Get args using by navArgs property delegate
 
-        binding.playAgainButton.setOnClickListener { viewModel.onPlayAgainClicked() }
+        binding.scoreViewModel = viewModel
 
-        viewModel.score.observe(this, Observer { finalScore ->
-            binding.scoreText.text = finalScore.toString()
-        })
+        // Specify the current activity as the lifecycle owner of the binding. This is used so that
+        // the binding can observe LiveData updates
+        binding.setLifecycleOwner(this)
 
+        // Navigates back to title when button is pressed
         viewModel.eventPlayAgain.observe(this, Observer { playAgain ->
-            if (playAgain) onPlayAgain()
+            if (playAgain) {
+                findNavController().navigate(ScoreFragmentDirections.actionRestart())
+                viewModel.onPlayAgainComplete()
+            }
         })
-
-
-        // TODO (07) Convert this class to properly observe and use ScoreViewModel
 
         return binding.root
-    }
-
-    private fun onPlayAgain() {
-        findNavController().navigate(ScoreFragmentDirections.actionRestart())
     }
 }
