@@ -51,6 +51,7 @@ class ScoreFragment : Fragment() {
                 false
         )
 
+
         val scoreFragmentArgs by navArgs<ScoreFragmentArgs>()
 
         viewModelFactory = ScoreViewModelFactory(scoreFragmentArgs.score)
