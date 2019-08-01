@@ -16,17 +16,21 @@
 
 package com.example.android.guesstheword.screens.game
 
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.example.android.guesstheword.R
 import com.example.android.guesstheword.databinding.GameFragmentBinding
+import com.example.android.guesstheword.screens.game.GameViewModel as GameViewModel
 
 /**
  * Fragment where the game is played
@@ -35,7 +39,6 @@ class GameFragment : Fragment() {
 
     private lateinit var viewModel: GameViewModel
 
-    // COMPLETED (01) Move over the word, score and wordList variables to the GameViewModel
 
     private lateinit var binding: GameFragmentBinding
 
@@ -51,7 +54,6 @@ class GameFragment : Fragment() {
         )
 
         // Get the viewmodel
-        Log.i("GameFragment", "Called ViewModelProviders.of")
         viewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
         updateScoreText()
         updateWordText()
@@ -74,9 +76,6 @@ class GameFragment : Fragment() {
 
     }
 
-    // COMPLETED (02) Move over methods resetList, nextWord, onSkip and onCorrect to the GameViewModel
-
-
     /**
      * Called when the game is finished
      */
@@ -90,7 +89,6 @@ class GameFragment : Fragment() {
 
     /** Methods for updating the UI **/
 
-    // COMPLETED (05) Update these methods to get word and score from the viewmodel
     private fun updateWordText() {
         binding.wordText.text = viewModel.word
 
@@ -98,5 +96,6 @@ class GameFragment : Fragment() {
 
     private fun updateScoreText() {
         binding.scoreText.text = viewModel.toString()
+
     }
 }

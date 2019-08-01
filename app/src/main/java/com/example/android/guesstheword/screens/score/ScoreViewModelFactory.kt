@@ -14,21 +14,19 @@
  * limitations under the License.
  */
 
-package com.example.android.guesstheword.screens.game
+package com.example.android.guesstheword.screens.score
 
-import android.util.Log
+
+
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 
-
-class GameViewModel: ViewModel() {
-    init {
-        Log.i("GameViewModel", "GameViewModel created")
-
+class ScoreViewModelFactory(private val finalScore: Int) : ViewModelProvider.Factory {
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(ScoreViewModel::class.java)) {
+            return ScoreViewModel(finalScore) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        Log.i("GameViewModel", "GameViewModel destroyed")
-    }
 }
-
