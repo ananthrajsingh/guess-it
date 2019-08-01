@@ -55,50 +55,47 @@ class GameFragment : Fragment() {
 
         // Get the viewmodel
         viewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
+        updateScoreText()
+        updateWordText()
+        // TODO (03) Move over this initialization to the GameViewModel
 
-        // Set the viewmodel for databinding - this allows the bound layout access to all of the
-        // data in the VieWModel
-        binding.gameViewModel = viewModel
-
-        // Specify the current activity as the lifecycle owner of the binding. This is used so that
-        // the binding can observe LiveData updates
-        binding.setLifecycleOwner(this)
-
-        // Sets up event listening to navigate the player when the game is finished
-        viewModel.eventGameFinish.observe(this, Observer { isFinished ->
-            if (isFinished) {
-                val currentScore = viewModel.score.value ?: 0
-                val action = GameFragmentDirections.actionGameToScore(currentScore)
-                findNavController(this).navigate(action)
-                viewModel.onGameFinishComplete()
-            }
-        })
-
-        // Buzzes when triggered with different buzz events
-        viewModel.eventBuzz.observe(this, Observer { buzzType ->
-            if (buzzType != GameViewModel.BuzzType.NO_BUZZ) {
-                buzz(buzzType.pattern)
-                viewModel.onBuzzComplete()
-            }
-        })
+        // COMPLETED (04) Update these onClickListeners to refer to call methods in the ViewModel then
+        // update the UI
+        binding.correctButton.setOnClickListener {
+            viewModel.onCorrect()
+            updateScoreText()
+            updateWordText()
+        }
+        binding.skipButton.setOnClickListener {
+            viewModel.onSkip()
+            updateScoreText()
+            updateWordText()
+        }
 
         return binding.root
 
     }
 
     /**
-     * Given a pattern, this method makes sure the device buzzes
+     * Called when the game is finished
      */
-    private fun buzz(pattern: LongArray) {
-        val buzzer = activity?.getSystemService<Vibrator>()
-        buzzer?.let {
-            // Vibrate for 500 milliseconds
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                buzzer.vibrate(VibrationEffect.createWaveform(pattern, -1))
-            } else {
-                //deprecated in API 26
-                buzzer.vibrate(pattern, -1)
-            }
-        }
+    private fun gameFinished() {
+//        val action = GameFragmentDirections.actionGameToScore(score)
+//        findNavController(this).navigate(action)
+    }
+
+
+
+
+    /** Methods for updating the UI **/
+
+    private fun updateWordText() {
+        binding.wordText.text = viewModel.word
+
+    }
+
+    private fun updateScoreText() {
+        binding.scoreText.text = viewModel.toString()
+
     }
 }
