@@ -26,13 +26,6 @@ import androidx.lifecycle.ViewModel
  */
 class GameViewModel : ViewModel() {
 
-    // TODO (01) Make an internal and external version of the word and score
-    // The internal version should be a MutableLiveData, have an underscore in front of its' name
-    // and be private
-    // The external version should be a LiveData
-    // TODO (02) Make a backing property for the external version that returns the internal
-    // MutableLiveData as a LiveData
-
     // The current word
     private val _word = MutableLiveData<String>()
     val word: LiveData<String>
@@ -45,44 +38,18 @@ class GameViewModel : ViewModel() {
         get() = _score
 
 
+
     // The list of words - the front of the list is the next word to guess
     private lateinit var wordList: MutableList<String>
 
-    // TODO (03) Use the internal version (the MutableLiveData) of _score and _word in this class
+
     init {
         resetList()
         nextWord()
         _score.value = 0
     }
 
-    /**
-     * Resets the list of words and randomizes the order
-     */
-    private fun resetList() {
-        wordList = mutableListOf(
-                "queen",
-                "hospital",
-                "basketball",
-                "cat",
-                "change",
-                "snail",
-                "soup",
-                "calendar",
-                "sad",
-                "desk",
-                "guitar",
-                "home",
-                "railway",
-                "zebra",
-                "jelly",
-                "car",
-                "crow",
-                "trade",
-                "bag",
-                "roll",
-                "bubble"
-        )
-        wordList.shuffle()
+
     }
 
     /**
@@ -106,6 +73,9 @@ class GameViewModel : ViewModel() {
 
     fun onCorrect() {
         _score.value = (score.value)?.plus(1)
+
         nextWord()
+
     }
 }
+

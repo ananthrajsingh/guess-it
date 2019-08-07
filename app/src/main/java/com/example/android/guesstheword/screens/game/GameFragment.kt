@@ -16,10 +16,14 @@
 
 package com.example.android.guesstheword.screens.game
 
+import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -27,6 +31,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.example.android.guesstheword.R
 import com.example.android.guesstheword.databinding.GameFragmentBinding
+import com.example.android.guesstheword.screens.game.GameViewModel as GameViewModel
 
 /**
  * Fragment where the game is played
@@ -34,6 +39,7 @@ import com.example.android.guesstheword.databinding.GameFragmentBinding
 class GameFragment : Fragment() {
 
     private lateinit var viewModel: GameViewModel
+
 
     private lateinit var binding: GameFragmentBinding
 
@@ -50,7 +56,12 @@ class GameFragment : Fragment() {
 
         // Get the viewmodel
         viewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
+        updateScoreText()
+        updateWordText()
+        // TODO (03) Move over this initialization to the GameViewModel
 
+        // COMPLETED (04) Update these onClickListeners to refer to call methods in the ViewModel then
+        // update the UI
         binding.correctButton.setOnClickListener {
             viewModel.onCorrect()
         }
@@ -58,13 +69,11 @@ class GameFragment : Fragment() {
             viewModel.onSkip()
         }
 
-        /** Setting up LiveData observation relationship **/
-        viewModel.word.observe(this, Observer { newWord ->
-            binding.wordText.text = newWord
-        })
-
         viewModel.score.observe(this, Observer { newScore ->
             binding.scoreText.text = newScore.toString()
+        } )
+        viewModel.word.observe(this, Observer { newWord ->
+            binding.wordText.text = newWord
         })
 
         return binding.root
@@ -75,9 +84,27 @@ class GameFragment : Fragment() {
      * Called when the game is finished
      */
     fun gameFinished() {
-        val currentScore = viewModel.score.value ?: 0
-        val action = GameFragmentDirections.actionGameToScore(currentScore)
+        // COMPLETED (06) Add a null safety check here - you can use the elvis operator to pass 0 if
+        // the LiveData is null
+        val action = GameFragmentDirections.actionGameToScore(viewModel.score.value ?: 0)
         findNavController(this).navigate(action)
+
+    }
+
+
+
+
+    /** Methods for updating the UI **/
+
+
+    private fun updateWordText() {
+        binding.wordText.text = viewModel.word
+
+    }
+
+    private fun updateScoreText() {
+        binding.scoreText.text = viewModel.toString()
+
     }
 
 }
