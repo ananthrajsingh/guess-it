@@ -29,7 +29,7 @@ class GameViewModel : ViewModel() {
     // The current word
     private val _word = MutableLiveData<String>()
     val word: LiveData<String>
-        get() = _word
+            get() = _word
 
 
     // The current score
@@ -52,34 +52,7 @@ class GameViewModel : ViewModel() {
         _score.value = 0
     }
 
-    /**
-     * Resets the list of words and randomizes the order
-     */
-    private fun resetList() {
-        wordList = mutableListOf(
-                "queen",
-                "hospital",
-                "basketball",
-                "cat",
-                "change",
-                "snail",
-                "soup",
-                "calendar",
-                "sad",
-                "desk",
-                "guitar",
-                "home",
-                "railway",
-                "zebra",
-                "jelly",
-                "car",
-                "crow",
-                "trade",
-                "bag",
-                "roll",
-                "bubble"
-        )
-        wordList.shuffle()
+
     }
 
     /**
@@ -90,6 +63,7 @@ class GameViewModel : ViewModel() {
         if (wordList.isEmpty()) {
             // gameFinished() should happen here
             _eventGameFinished.value = true
+
         } else {
             _word.value = wordList.removeAt(0)
         }
@@ -98,16 +72,16 @@ class GameViewModel : ViewModel() {
     /** Methods for buttons presses **/
 
     fun onSkip() {
-        _score.value = (_score.value)?.minus(1)
+        _score.value = (score.value)?.minus(1)
         nextWord()
     }
 
     fun onCorrect() {
-        _score.value = (_score.value)?.plus(1)
+        _score.value = (score.value)?.plus(1)
+
         nextWord()
-    }
 
     public fun onGameFinishComplete() { _eventGameFinished.value = false }
 
-
 }
+
