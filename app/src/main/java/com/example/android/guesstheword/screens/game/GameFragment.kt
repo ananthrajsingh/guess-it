@@ -52,6 +52,7 @@ class GameFragment : Fragment() {
                 R.layout.game_fragment,
                 container,
                 false
+
         )
 
         // Get the viewmodel
@@ -74,6 +75,14 @@ class GameFragment : Fragment() {
         } )
         viewModel.word.observe(this, Observer { newWord ->
             binding.wordText.text = newWord
+        })
+
+
+        viewModel.eventGameFinished.observe(this, Observer { isFinished ->
+            if (isFinished) {
+                gameFinished()
+                viewModel.onGameFinishComplete()
+            }
         })
 
         return binding.root
