@@ -77,8 +77,11 @@ class GameFragment : Fragment() {
             binding.wordText.text = newWord
         })
 
-
-        viewModel.eventGameFinished.observe(this, Observer { isFinished ->
+        viewModel.currentTime.observe(this, Observer { currentTime ->
+            binding.timerText.text = currentTime.toString()
+        })
+        // Sets up event listening to navigate the player when the game is finished
+        viewModel.eventGameFinish.observe(this, Observer { isFinished ->
             if (isFinished) {
                 gameFinished()
                 viewModel.onGameFinishComplete()
