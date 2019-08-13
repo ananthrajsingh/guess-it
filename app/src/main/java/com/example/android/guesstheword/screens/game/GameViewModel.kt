@@ -1,5 +1,5 @@
 /*
- * Copyright 2018, The Android Open Source Project
+ * Copyright 2018, The   Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,13 +28,6 @@ import androidx.lifecycle.ViewModel
  */
 class GameViewModel : ViewModel() {
 
-    // COMPLETED (01) Copy over the provided companion object with the timer constants
-
-    // COMPLETED (02) Create a timer field of type CountDownTimer
-
-    // COMPLETED (03) Create a properly encapsulated LiveData for the current time called currentTime
-    // Its type should be Long
-
     companion object {
         const val DONE = 0L
         const val ONE_SECOND = 1000L
@@ -46,10 +39,11 @@ class GameViewModel : ViewModel() {
     private val _currentTime = MutableLiveData<Int>()
     val currentTime: LiveData<Int>
         get() = _currentTime
+
     // The current word
     private val _word = MutableLiveData<String>()
     val word: LiveData<String>
-        get() = _word
+            get() = _word
 
 
     // The current score
@@ -57,14 +51,14 @@ class GameViewModel : ViewModel() {
     val score: LiveData<Int>
         get() = _score
 
-
     // The list of words - the front of the list is the next word to guess
     private lateinit var wordList: MutableList<String>
 
-    // Event which triggers the end of the game
-    private val _eventGameFinish = MutableLiveData<Boolean>()
-    val eventGameFinish: LiveData<Boolean>
-        get() = _eventGameFinish
+    // boolean
+    private val _eventGameFinished = MutableLiveData<Boolean>()
+    val eventGameFinished: LiveData<Boolean>
+        get() = _eventGameFinished
+
 
     init {
         _currentTime.value = 0
@@ -81,39 +75,9 @@ class GameViewModel : ViewModel() {
         resetList()
         nextWord()
         _score.value = 0
-
-        // COMPLETED (04) Copy over the CountDownTimer code and then update currentTime and
-        // eventGameFinish appropriately as the timer ticks and finishes
     }
 
-    /**
-     * Resets the list of words and randomizes the order
-     */
-    private fun resetList() {
-        wordList = mutableListOf(
-                "queen",
-                "hospital",
-                "basketball",
-                "cat",
-                "change",
-                "snail",
-                "soup",
-                "calendar",
-                "sad",
-                "desk",
-                "guitar",
-                "home",
-                "railway",
-                "zebra",
-                "jelly",
-                "car",
-                "crow",
-                "trade",
-                "bag",
-                "roll",
-                "bubble"
-        )
-        wordList.shuffle()
+
     }
 
     /**
@@ -122,9 +86,9 @@ class GameViewModel : ViewModel() {
     private fun nextWord() {
         //Select and remove a word from the list
         if (wordList.isEmpty()) {
-            // COMPLETED (05) Update this logic so that the game doesn't finish;
-            // Instead the list is reset and re-shuffled when you run out of words
             resetList()
+            // gameFinished() should happen here
+            _eventGameFinished.value = true
         } else {
             _word.value = wordList.removeAt(0)
         }
@@ -133,24 +97,19 @@ class GameViewModel : ViewModel() {
     /** Methods for buttons presses **/
 
     fun onSkip() {
-        _score.value = (_score.value)?.minus(1)
+        _score.value = (score.value)?.minus(1)
         nextWord()
     }
 
     fun onCorrect() {
-        _score.value = (_score.value)?.plus(1)
+        _score.value = (score.value)?.plus(1)
+
         nextWord()
-    }
 
-    /** Methods for completed events **/
-
-    fun onGameFinishComplete() {
-        _eventGameFinish.value = false
-    }
-
-    // COMPLETED (06) Cancel the timer in onCleared
     override fun onCleared() {
         super.onCleared()
         timer.cancel()
     }
+    public fun onGameFinishComplete() { _eventGameFinished.value = false }
 }
+
