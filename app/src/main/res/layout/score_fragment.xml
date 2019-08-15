@@ -19,7 +19,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="scoreViewModel"
             type="com.example.android.guesstheword.screens.score.ScoreViewModel" />
@@ -47,8 +46,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed" />
-
-        <!-- COMPLETED (04) Use the LiveData from ScoreViewModel to set the score_text text attribute -->
         <TextView
             android:id="@+id/score_text"
             android:layout_width="wrap_content"
@@ -56,6 +53,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif"
+            android:text="@{String.valueOf(scoreViewModel.score)}"
             android:textColor="@color/black_text_color"
             android:textSize="34sp"
             android:textStyle="normal"
@@ -75,6 +73,7 @@
             android:layout_marginBottom="32dp"
             android:onClick="@{() -> scoreViewModel.onPlayAgain()}"
             android:text="@string/play_again"
+            android:onClick="@{() -> scoreViewModel.onPlayAgain()}"
             android:theme="@style/GoButton"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
