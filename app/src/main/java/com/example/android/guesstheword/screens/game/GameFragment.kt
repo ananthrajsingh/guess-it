@@ -59,10 +59,7 @@ class GameFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
         updateScoreText()
         updateWordText()
-        // TODO (03) Move over this initialization to the GameViewModel
-
-
-        binding.correctButton.setOnClickListener {
+binding.correctButton.setOnClickListener {
             viewModel.onCorrect()
         }
         binding.skipButton.setOnClickListener {
