@@ -61,8 +61,7 @@ class GameFragment : Fragment() {
         updateWordText()
         // TODO (03) Move over this initialization to the GameViewModel
 
-        // COMPLETED (04) Update these onClickListeners to refer to call methods in the ViewModel then
-        // update the UI
+
         binding.correctButton.setOnClickListener {
             viewModel.onCorrect()
         }

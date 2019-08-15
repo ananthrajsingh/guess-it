@@ -17,7 +17,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
     <data>
 
         <variable
@@ -108,6 +107,7 @@
             android:onClick="@{() -> gameViewModel.onSkip()}"
             android:text="@string/skip"
             android:theme="@style/SkipButton"
+            android:onClick="@{() -> gameViewModel.onSkip()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/correct_button"
             app:layout_constraintHorizontal_bias="0.5"
@@ -130,6 +130,7 @@
             android:onClick="@{() -> gameViewModel.onCorrect()}"
             android:text="@string/got_it"
             android:theme="@style/GoButton"
+            android:onClick="@{() -> gameViewModel.onCorrect()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
