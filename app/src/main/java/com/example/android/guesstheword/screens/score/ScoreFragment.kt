@@ -53,21 +53,19 @@ class ScoreFragment : Fragment() {
                 false
         )
 
+
         val scoreFragmentArgs by navArgs<ScoreFragmentArgs>()
 
         viewModelFactory = ScoreViewModelFactory(scoreFragmentArgs.score)
         viewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(ScoreViewModel::class.java)
 
-        // COMPLETED (06) Pass the ScoreViewModel into the data binding - then you can remove the
-        // OnClickListener setup for playAgainButton from here
-
         binding.scoreViewModel = viewModel
         // Add observer for score
         viewModel.score.observe(this, Observer { newScore ->
             binding.scoreText.text = newScore.toString()
         })
-
+\
 
         // Navigates back to title when button is pressed
         viewModel.eventPlayAgain.observe(this, Observer { playAgain ->
