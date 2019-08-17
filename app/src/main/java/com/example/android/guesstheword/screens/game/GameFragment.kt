@@ -16,11 +16,14 @@
 
 package com.example.android.guesstheword.screens.game
 
+import android.os.Build
 import android.os.Bundle
-import android.text.format.DateUtils
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -28,6 +31,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.example.android.guesstheword.R
 import com.example.android.guesstheword.databinding.GameFragmentBinding
+import com.example.android.guesstheword.screens.game.GameViewModel as GameViewModel
 
 /**
  * Fragment where the game is played
@@ -35,6 +39,7 @@ import com.example.android.guesstheword.databinding.GameFragmentBinding
 class GameFragment : Fragment() {
 
     private lateinit var viewModel: GameViewModel
+
 
     private lateinit var binding: GameFragmentBinding
 
@@ -47,33 +52,64 @@ class GameFragment : Fragment() {
                 R.layout.game_fragment,
                 container,
                 false
+
         )
 
         // Get the viewmodel
         viewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
+        updateScoreText()
+        updateWordText()
+binding.correctButton.setOnClickListener {
+            viewModel.onCorrect()
+        }
+        binding.skipButton.setOnClickListener {
+            viewModel.onSkip()
+        }
 
-        // Set the viewmodel for databinding - this allows the bound layout access to all of the
-        // data in the VieWModel
-        binding.gameViewModel = viewModel
+        viewModel.score.observe(this, Observer { newScore ->
+            binding.scoreText.text = newScore.toString()
+        } )
+        viewModel.word.observe(this, Observer { newWord ->
+            binding.wordText.text = newWord
+        })
 
-        // Specify the current activity as the lifecycle owner of the binding. This is used so that
-        // the binding can observe LiveData updates
-        binding.setLifecycleOwner(this)
-
-        // COMPLETED (04) Now you can delete this observer
-
-
+        viewModel.currentTime.observe(this, Observer { currentTime ->
+            binding.timerText.text = currentTime.toString()
+        })
         // Sets up event listening to navigate the player when the game is finished
         viewModel.eventGameFinish.observe(this, Observer { isFinished ->
             if (isFinished) {
-                val currentScore = viewModel.score.value ?: 0
-                val action = GameFragmentDirections.actionGameToScore(currentScore)
-                findNavController(this).navigate(action)
+                gameFinished()
                 viewModel.onGameFinishComplete()
             }
         })
 
         return binding.root
+
+    }
+
+    /**
+     * Called when the game is finished
+     */
+    fun gameFinished() {
+        val action = GameFragmentDirections.actionGameToScore(viewModel.score.value ?: 0)
+        findNavController(this).navigate(action)
+
+    }
+
+
+
+
+    /** Methods for updating the UI **/
+
+
+    private fun updateWordText() {
+        binding.wordText.text = viewModel.word
+
+    }
+
+    private fun updateScoreText() {
+        binding.scoreText.text = viewModel.toString()
 
     }
 
