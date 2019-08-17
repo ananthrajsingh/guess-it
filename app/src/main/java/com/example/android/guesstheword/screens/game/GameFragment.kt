@@ -84,32 +84,25 @@ binding.correctButton.setOnClickListener {
             }
         })
 
+        viewModel.eventBuzz.observe(this, Observer { buzzType ->
+            buzz(buzzType.pattern)
+        })
+
         return binding.root
 
     }
 
-    /**
-     * Called when the game is finished
-     */
-    fun gameFinished() {
-        val action = GameFragmentDirections.actionGameToScore(viewModel.score.value ?: 0)
-        findNavController(this).navigate(action)
+    private fun buzz(pattern: LongArray) {
+        val buzzer = activity?.getSystemService<Vibrator>()
 
-    }
-
-
-
-
-    /** Methods for updating the UI **/
-
-
-    private fun updateWordText() {
-        binding.wordText.text = viewModel.word
-
-    }
-
-    private fun updateScoreText() {
-        binding.scoreText.text = viewModel.toString()
+        buzzer?.let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                buzzer.vibrate(VibrationEffect.createWaveform(pattern, -1))
+            } else {
+                //deprecated in API 26
+                buzzer.vibrate(pattern, -1)
+            }
+        }
 
     }
 
