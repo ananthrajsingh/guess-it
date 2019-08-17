@@ -92,8 +92,6 @@ binding.correctButton.setOnClickListener {
      * Called when the game is finished
      */
     fun gameFinished() {
-        // COMPLETED (06) Add a null safety check here - you can use the elvis operator to pass 0 if
-        // the LiveData is null
         val action = GameFragmentDirections.actionGameToScore(viewModel.score.value ?: 0)
         findNavController(this).navigate(action)
 
