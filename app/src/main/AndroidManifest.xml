@@ -17,9 +17,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.android.guesstheword">
-
-    <!-- COMPLETED (01) Add the Vibrate permission -->
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <!-- Permission needed for haptic feedback -->
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -30,8 +29,6 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <!-- COMPLETED (02) You can also optionally lock the screen to landscape - copy over
-         the provided code-->
         <!-- Screen locked to landscape for easier play -->
         <!-- configChanges attribute makes the following actions NOT cause a config change  -->
         <!-- screenOrientation attribute sets the default animation-->
